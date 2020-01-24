@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import PlaceList from '../components/PlaceList';
 
@@ -29,6 +30,13 @@ const DUMMY_PLACES = [
   }
 ];
 
-const UserPlaces: React.FC = () => <PlaceList items={DUMMY_PLACES} />;
+const UserPlaces: React.FC = () => {
+  //動的パラメータを取得
+  const { userId } = useParams();
+  // createrとuserIdが一致しているものだけ取り出す
+  const loadedPlaces = DUMMY_PLACES.filter(place => place.creator === userId);
+  
+  return <PlaceList items={loadedPlaces} />;
+};
 
 export default UserPlaces;
