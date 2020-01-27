@@ -59,7 +59,11 @@ const NewPlace: React.FC = () => {
       description: {
         value: '',
         isValid: false,
-      }
+      },
+      address: {
+        value: '',
+        isValid: false,
+      },
     },
     isValid: false,
   });
