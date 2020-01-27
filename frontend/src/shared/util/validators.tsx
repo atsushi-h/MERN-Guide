@@ -8,16 +8,16 @@ const VALIDATOR_TYPE_FILE = 'FILE';
 
 export const VALIDATOR_REQUIRE = () => ({ type: VALIDATOR_TYPE_REQUIRE });
 export const VALIDATOR_FILE = () => ({ type: VALIDATOR_TYPE_FILE });
-export const VALIDATOR_MINLENGTH = (val: string) => ({
+export const VALIDATOR_MINLENGTH = (val: number) => ({
   type: VALIDATOR_TYPE_MINLENGTH,
   val: val
 });
-export const VALIDATOR_MAXLENGTH = (val: string) => ({
+export const VALIDATOR_MAXLENGTH = (val: number) => ({
   type: VALIDATOR_TYPE_MAXLENGTH,
   val: val
 });
-export const VALIDATOR_MIN = (val: string) => ({ type: VALIDATOR_TYPE_MIN, val: val });
-export const VALIDATOR_MAX = (val: string) => ({ type: VALIDATOR_TYPE_MAX, val: val });
+export const VALIDATOR_MIN = (val: number) => ({ type: VALIDATOR_TYPE_MIN, val: val });
+export const VALIDATOR_MAX = (val: number) => ({ type: VALIDATOR_TYPE_MAX, val: val });
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
 
 export const validate = (value: any, validators: any) => {

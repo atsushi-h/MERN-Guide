@@ -1,4 +1,4 @@
-import React, { useReducer, ChangeEvent } from 'react';
+import React, { useReducer, useEffect, ChangeEvent } from 'react';
 
 import { validate } from '../../util/validators';
 import './Input.css';
@@ -45,13 +45,14 @@ const inputReducer = (state: State, action: Actions) => {
 
 type Props = {
   element: "input" | "textarea",
-  id?: string,
-  type: string,
+  id: string,
+  type?: string,
   placeholder?: string,
   rows?: number,
   label: string,
   validators: Validater[],
   errorText: string,
+  onInput: (id: string, value: string, isValid: boolean) => void,
 };
 
 const Input: React.FC<Props> = props => {
@@ -60,6 +61,13 @@ const Input: React.FC<Props> = props => {
     isValid: false,
     isTouched: false,
   });
+
+  const { id, onInput } = props;
+  const { value, isValid } = inputState;
+
+  useEffect(() => {
+    onInput(id, value, isValid)
+  }, [id, value, isValid, onInput]);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     dispatch({
