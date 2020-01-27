@@ -53,12 +53,14 @@ type Props = {
   validators: Validater[],
   errorText: string,
   onInput: (id: string, value: string, isValid: boolean) => void,
+  initialValue?: string,
+  initialValid?: boolean,
 };
 
 const Input: React.FC<Props> = props => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: '',
-    isValid: false,
+    value: props.initialValue || '',
+    isValid: props.initialValid || false,
     isTouched: false,
   });
 
