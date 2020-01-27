@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Input from '../../shared/components/FormElements/Input';
@@ -37,24 +37,44 @@ const DUMMY_PLACES = [
 ];
 
 const UpdatePlace: React.FC = () => {
-  // 動的パラメータ取得
+  const [isLoading, setIsLoading] = useState(true);
   const { placeId } = useParams();
+
+  // 初期化
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      title: {
+        value: '',
+        isValid: false,
+      },
+      description: {
+        value: '',
+        isValid: false,
+      }
+    },
+    false,
+  );
+
   // placeIdが一致するものだけ取り出す
   const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId);
 
-  const [formState, inputHandler] = useForm(
-    {
-      title: {
-        value: identifiedPlace!.title,
-        isValid: true,
+  useEffect(() => {
+    // データをセット
+    setFormData(
+      {
+        title: {
+          value: identifiedPlace!.title,
+          isValid: true
+        },
+        description: {
+          value: identifiedPlace!.description,
+          isValid: true
+        }
       },
-      description: {
-        value: identifiedPlace!.description,
-        isValid: true,
-      }
-    },
-    true,
-  );
+      true
+    );
+    setIsLoading(false); // ローディング終了
+  }, [setFormData, identifiedPlace]);
 
   const placeUpdateSubmitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,6 +85,14 @@ const UpdatePlace: React.FC = () => {
     return (
       <div className="center">
         <h2>Could not find place!</h2>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading...</h2>
       </div>
     );
   }
