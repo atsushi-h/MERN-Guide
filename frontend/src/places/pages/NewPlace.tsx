@@ -1,57 +1,14 @@
-import React, { useCallback, useReducer, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
+import { useForm } from '../../shared/hooks/form-hook';
 import './PlaceForm.css';
 
-type State = {
-  inputs: {
-    [key: string]: {
-      value: string,
-      isValid: boolean,
-    }
-  },
-  isValid: boolean,
-};
-
-type Action = {
-  type: 'INPUT_CHANGE',
-  inputId: string,
-  value: string,
-  isValid: boolean,
-};
-
-const formReducer = (state: State, action: Action) => {
-  switch(action.type) {
-    case 'INPUT_CHANGE':
-      let formIsValid = true;
-      for (const inputId in state.inputs) {
-        if (inputId === action.inputId) {
-          formIsValid = formIsValid && action.isValid;
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid;
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.inputId]: {
-            value: action.value,
-            isValid: action.isValid,
-          },
-        },
-        isValid: formIsValid,
-      };
-    default: 
-      return state;
-  }
-};
-
 const NewPlace: React.FC = () => {
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
+  const [formState, inputHandler] = useForm(
+    {
       title: {
         value: '',
         isValid: false,
@@ -65,17 +22,8 @@ const NewPlace: React.FC = () => {
         isValid: false,
       },
     },
-    isValid: false,
-  });
-
-  const inputHandler = useCallback((id: string, value: string, isValid: boolean) => {
-    dispatch({
-      type: 'INPUT_CHANGE',
-      inputId: id,
-      value: value,
-      isValid: isValid,
-    });
-  }, []);
+    false,
+  );
 
   const placeSubmitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
