@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
+import Card from '../../shared/components/UIElements/Card';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import './PlaceForm.css';
@@ -59,20 +60,22 @@ const UpdatePlace: React.FC = () => {
   const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId);
 
   useEffect(() => {
-    // データをセット
-    setFormData(
-      {
-        title: {
-          value: identifiedPlace!.title,
-          isValid: true
+    // identifiedPlaceがundefinedでないとき、データをセット
+    if (identifiedPlace) {
+      setFormData(
+        {
+          title: {
+            value: identifiedPlace.title,
+            isValid: true
+          },
+          description: {
+            value: identifiedPlace.description,
+            isValid: true
+          }
         },
-        description: {
-          value: identifiedPlace!.description,
-          isValid: true
-        }
-      },
-      true
-    );
+        true
+      );
+    }
     setIsLoading(false); // ローディング終了
   }, [setFormData, identifiedPlace]);
 
@@ -84,7 +87,9 @@ const UpdatePlace: React.FC = () => {
   if (!identifiedPlace) {
     return (
       <div className="center">
-        <h2>Could not find place!</h2>
+        <Card>
+          <h2>Could not find place!</h2>
+        </Card>
       </div>
     );
   }
