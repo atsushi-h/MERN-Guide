@@ -112,8 +112,8 @@ const UpdatePlace: React.FC = () => {
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter a valid title."
         onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
+        initialValue={formState.inputs.title!.value}
+        initialValid={formState.inputs.title!.isValid}
       />
       <Input
         id="description"
@@ -122,8 +122,8 @@ const UpdatePlace: React.FC = () => {
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorText="Please enter a valid description (min. 5 characters)."
         onInput={inputHandler}
-        initialValue={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
+        initialValue={formState.inputs.title!.value}
+        initialValid={formState.inputs.title!.isValid}
       />
       <Button type="submit" disabled={!formState.isValid}>
         UPDATE PLACE
