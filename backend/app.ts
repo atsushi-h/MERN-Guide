@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 
 import placesRoutes from './routes/places-routes';
+import usersRoutes from './routes/users-routes';
 import HttpError from './models/http-error';
 
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use('/api/places', placesRoutes); // => /api/places/...
+app.use('/api/users', usersRoutes);
 
 // Routing Error
 app.use((req, res, next) => {
