@@ -65,3 +65,19 @@ export const createPlace = (req: Request, res: Response, next: NextFunction) => 
   DUMMY_PLACES.push(createdPlace);
   res.status(201).json({ place: createdPlace });
 };
+
+export const updatePlace = (req: Request, res: Response, next: NextFunction) => {
+  const { title, description } = req.body;
+  const placeId = req.params.pid;
+
+  const updatedPlace = DUMMY_PLACES.find(p => p.id === placeId);
+  const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
+  // updatedPlaceがundefinedでないとき
+  if (updatedPlace) {
+    updatedPlace.title = title;
+    updatedPlace.description = description;
+    DUMMY_PLACES[placeIndex] = updatedPlace;
+  }
+  
+  res.status(200).json({ place: updatedPlace });
+};
