@@ -1,5 +1,7 @@
 import { Router } from 'express';
 
+import HttpError from '../models/http-error';
+
 const router = Router();
 
 const DUMMY_PLACES = [
@@ -22,8 +24,7 @@ router.get('/:pid', (req, res, next) => {
 
   // Error
   if (!place) {
-    const error: any = new Error('Could not find a place for the provided id.');
-    error.code = 404;
+    const error = new HttpError('Could not find a place for the provided id.', 404);
     throw error;
   }
 
@@ -37,8 +38,7 @@ router.get('/user/:uid', (req, res, next) => {
 
   // Error
   if (!place) {
-    const error: any = new Error('Could not find a place for the provided user id.');
-    error.code = 404;
+    const error = new HttpError('Could not find a place for the provided user id.', 404);
     return next(error);
   }
 
