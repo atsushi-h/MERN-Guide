@@ -31,18 +31,18 @@ export const getPlaceById = (req: Request, res: Response, next: NextFunction) =>
   res.json({ place }); // => { place } => { place: place }
 };
 
-export const getPlaceByUserId = (req: Request, res: Response, next: NextFunction) => {
+export const getPlacesByUserId = (req: Request, res: Response, next: NextFunction) => {
   const userId = req.params.uid;
-  const place = DUMMY_PLACES.find(p => p.creator === userId);
+  const places = DUMMY_PLACES.filter(p => p.creator === userId);
 
   // Error
-  if (!place) {
-    const error = new HttpError('Could not find a place for the provided user id.', 404);
+  if (!places || places.length === 0) {
+    const error = new HttpError('Could not find places for the provided user id.', 404);
     return next(error);
   }
 
   // Success
-  res.json({ place });
+  res.json({ places });
 };
 
 export const createPlace = (req: Request, res: Response, next: NextFunction) => {
