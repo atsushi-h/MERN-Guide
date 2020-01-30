@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 
 import placesRoutes from './routes/places-routes';
@@ -7,9 +7,14 @@ const app = express();
 
 app.use('/api/places', placesRoutes); // => /api/places/...
 
+interface Error {
+  code: number,
+  message: string,
+}
+
 // Error Handling
-app.use((error, req, res, next) => {
-  if (res.headerSent) {
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  if (res.headersSent) {
     return next(error);
   }
   res.status(error.code || 500);
