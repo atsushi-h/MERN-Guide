@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import uuid from 'uuid/v4';
 
 import HttpError from '../models/http-error';
 
@@ -42,4 +43,25 @@ export const getPlaceByUserId = (req: Request, res: Response, next: NextFunction
 
   // Success
   res.json({ place });
+};
+
+export const createPlace = (req: Request, res: Response, next: NextFunction) => {
+  const {
+    title,
+    description,
+    coordinates,
+    address,
+    creator
+  } = req.body;
+  const createdPlace = {
+    id: uuid(), // Unique ID
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+
+  DUMMY_PLACES.push(createdPlace);
+  res.status(201).json({ place: createdPlace });
 };
