@@ -5,6 +5,7 @@ import {
   getPlaceByUserId,
   createPlace,
   updatePlace,
+  deletePlace,
 } from '../controllers/places-controller';
 
 const router = Router();
@@ -15,5 +16,7 @@ router.get('/user/:uid', getPlaceByUserId);
 router.post('/', createPlace);
 
 router.patch('/:pid', updatePlace);
+
+router.delete('/:pid', deletePlace);
 
 export default router;
