@@ -4,7 +4,6 @@ import { validationResult } from 'express-validator';
 
 import HttpError from '../models/http-error';
 import getCoordsForAddress from '../util/location';
-import { async } from 'q';
 
 let DUMMY_PLACES = [
   {

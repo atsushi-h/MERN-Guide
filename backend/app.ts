@@ -1,5 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import monggose from 'mongoose';
 
 import placesRoutes from './routes/places-routes';
 import usersRoutes from './routes/users-routes';
@@ -31,4 +35,11 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.json({message: error.message || 'An unknown error occurred!'});
 });
 
-app.listen(5000);
+if (process.env.DB_URL) {
+  monggose.connect(process.env.DB_URL).then(() => {
+    app.listen(5000);
+    console.log('Server Start! http://localhost:5000');
+  }).catch(error => {
+    console.log(error);
+  });
+}
