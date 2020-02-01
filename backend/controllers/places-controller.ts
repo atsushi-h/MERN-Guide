@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 
 import HttpError from '../models/http-error';
 import getCoordsForAddress from '../util/location';
+import Place from '../models/place';
 
 let DUMMY_PLACES = [
   {
@@ -65,16 +66,25 @@ export const createPlace = async (req: Request, res: Response, next: NextFunctio
     return next(error);
   }
 
-  const createdPlace = {
-    id: uuid(), // Unique ID
+  const createdPlace = new Place({
     title,
     description,
-    location: coordinates,
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
     address,
+    location: coordinates,
     creator,
-  };
+  });
 
-  DUMMY_PLACES.push(createdPlace);
+  try {
+    await createdPlace.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Creating place failed, please try again.',
+      500
+    );
+    return next(error);
+  }
+  
   res.status(201).json({ place: createdPlace });
 };
 
