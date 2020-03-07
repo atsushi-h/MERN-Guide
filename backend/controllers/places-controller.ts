@@ -114,7 +114,7 @@ export const createPlace = async (req: Request, res: Response, next: NextFunctio
   res.status(201).json({ place: createdPlace });
 };
 
-export const updatePlace = (req: Request, res: Response, next: NextFunction) => {
+export const updatePlace = async (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new HttpError('Invalid inputs passed, please check your data.', 422);
@@ -123,16 +123,33 @@ export const updatePlace = (req: Request, res: Response, next: NextFunction) => 
   const { title, description } = req.body;
   const placeId = req.params.pid;
 
-  const updatedPlace = DUMMY_PLACES.find(p => p.id === placeId);
-  const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
-  // updatedPlaceがundefinedでないとき
-  if (updatedPlace) {
-    updatedPlace.title = title;
-    updatedPlace.description = description;
-    DUMMY_PLACES[placeIndex] = updatedPlace;
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
+  }
+
+  if (place) {
+    place.title = title;
+    place.description = description;
+  }
+
+  try {
+    await place?.save();
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not update place.',
+      500
+    );
+    return next(error);
   }
   
-  res.status(200).json({ place: updatedPlace });
+  res.status(200).json({ place: place?.toObject({ getters: true }) });
 };
 
 export const deletePlace = (req: Request, res: Response, next: NextFunction) => {
