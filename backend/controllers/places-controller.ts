@@ -1,10 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import uuid from 'uuid/v4';
 import { validationResult } from 'express-validator';
+import mongoose from 'mongoose';
 
 import HttpError from '../models/http-error';
 import getCoordsForAddress from '../util/location';
 import Place from '../models/place';
+import User from '../models/user';
+import mongooseUniqueValidator from 'mongoose-unique-validator';
 
 let DUMMY_PLACES = [
   {
@@ -101,8 +104,32 @@ export const createPlace = async (req: Request, res: Response, next: NextFunctio
     creator,
   });
 
+  let user;
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    const error = new HttpError(
+      'Creating place failed, please try again',
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError(
+      'Could not find user for provided id',
+      404
+    );
+    return next(error);
+  }
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdPlace.save({ session: sess });
+    user.places.push(createdPlace);
+    await user.save({ session: sess });
+    await sess.commitTransaction();
   } catch (err) {
     const error = new HttpError(
       'Creating place failed, please try again.',

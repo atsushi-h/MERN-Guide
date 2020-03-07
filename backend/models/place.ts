@@ -1,16 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-
-interface IPlaceDocument extends mongoose.Document {
-  title: String,
-  description: String,
-  image: String,
-  address: String,
-  location: {
-    lat: Number,
-    lng: Number,
-  },
-  creator: String,
-}
+import IPlaceDocument from './IPlaceDocument';
 
 const placeSchema = new Schema({
   title: { type: String, required: true },
@@ -21,7 +10,7 @@ const placeSchema = new Schema({
     lat: { type: Number, required: true },
     lng: { type: Number, required: true },
   },
-  creator: { type: String, required: true },
+  creator: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
 });
 
 const Place = mongoose.model<IPlaceDocument>('Place', placeSchema);
