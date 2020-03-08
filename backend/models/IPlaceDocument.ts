@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import IUserDocument from './IUserDocument';
 
 export default interface IPlaceDocument extends mongoose.Document {
   title: String,
@@ -9,5 +10,5 @@ export default interface IPlaceDocument extends mongoose.Document {
     lat: Number,
     lng: Number,
   },
-  creator: mongoose.Types.ObjectId,
+  creator: IUserDocument,
 }
