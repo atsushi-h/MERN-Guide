@@ -1,18 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import uuid from 'uuid/v4';
 import { validationResult } from 'express-validator';
 
 import HttpError from '../models/http-error';
 import User from '../models/user';
-
-const DUMMY_USERS = [
-  {
-    id: 'u1',
-    name: 'Max Schwarz',
-    email: 'test@test.com',
-    password: 'testers',
-  },
-];
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   let users;
