@@ -60,13 +60,39 @@ const Auth: React.FC = () => {
 
   const authSubmitHandler = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true); // start loading
     
     if (isLoginMode) {// Login
+      try {
+        if (formState.inputs.email && formState.inputs.password) {
+          const response = await fetch('http://localhost:5000/api/users/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value
+            })
+          });
 
+          const responseData = await response.json();
+
+          // Error
+          if (!response.ok) {
+            throw new Error(responseData.message);
+          }
+          console.log(responseData);
+
+          setIsLoading(false); // finish loading
+          auth.login();
+        }
+      } catch (err) {
+        setIsLoading(false); // finish loading
+        setError(err.message || 'Something went wrong, please try again.');
+      }
     } else {// Signup
       try {
-        setIsLoading(true); // start loading
-
         if (formState.inputs.name && formState.inputs.email && formState.inputs.password) {
           console.log(formState.inputs);
           const response = await fetch('http://localhost:5000/api/users/signup', {
