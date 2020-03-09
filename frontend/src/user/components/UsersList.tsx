@@ -1,7 +1,7 @@
 import React from 'react';
 
 import UserItem from './UserItem';
-import './UserList.css';
+import './UsersList.css';
 
 type Props = {
   items: User[]
@@ -14,7 +14,7 @@ type User = {
   places: number,
 };
 
-const UserList: React.FC<Props> = props => {
+const UsersList: React.FC<Props> = props => {
   if (props.items.length === 0) {
     return (
       <div className="center">
@@ -38,4 +38,4 @@ const UserList: React.FC<Props> = props => {
   );
 };
 
-export default UserList;
+export default UsersList;
