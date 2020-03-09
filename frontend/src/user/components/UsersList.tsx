@@ -11,7 +11,7 @@ type User = {
   id: string,
   image: string,
   name: string,
-  places: number,
+  places: [],
 };
 
 const UsersList: React.FC<Props> = props => {
@@ -31,7 +31,7 @@ const UsersList: React.FC<Props> = props => {
           id={user.id}
           image={user.image}
           name={user.name}
-          placeCount={user.places}
+          placeCount={user.places.length}
         />
       ))}
     </ul>
