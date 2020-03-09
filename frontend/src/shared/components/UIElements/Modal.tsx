@@ -11,7 +11,7 @@ type ModalOverlay = {
   header: string,
   onSubmit?: () => void,
   contentClass?: string,
-  footerClass: string,
+  footerClass?: string,
   footer: React.ReactNode,
 };
 
@@ -47,7 +47,7 @@ type Modal = {
   onCancel: () => void,
   header: string,
   contentClass?: string,
-  footerClass: string,
+  footerClass?: string,
   footer: React.ReactNode,
 };
 
