@@ -24,6 +24,12 @@ const UserPlaces: React.FC = () => {
 
     fetchPlaces();
   }, [sendRequest, userId]);
+
+  const placeDeletedHandler = (deletedPlaceId: string) => {
+    setLoadedPlaces(prevPlaces =>
+      prevPlaces.filter(place => place.id !== deletedPlaceId)
+    );
+  };
   
   return (
     <>
@@ -33,7 +39,9 @@ const UserPlaces: React.FC = () => {
           <LoadingSpinner asOverlay />
         </div>
       )}
-      {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+      {!isLoading && loadedPlaces && (
+        <PlaceList items={loadedPlaces} onDeletePlace={placeDeletedHandler} />
+      )}
     </>
   );
 };

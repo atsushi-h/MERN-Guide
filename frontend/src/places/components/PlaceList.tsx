@@ -6,7 +6,8 @@ import Button from '../../shared/components/FormElements/Button';
 import './PlaceList.css';
 
 type Props = {
-  items: Places[]
+  items: Places[],
+  onDeletePlace: (deletedPlaceId: string) => void,
 };
 
 type Places = {
@@ -15,13 +16,11 @@ type Places = {
   description: string,
   image: string,
   address: string,
-  location: Location,
+  location: {
+    lat: number,
+    lng: number,
+  },
   creator: string,
-};
-
-type Location = {
-  lat: number,
-  lng: number,
 };
 
 const PlaceList: React.FC<Props> = props => {
@@ -48,6 +47,7 @@ const PlaceList: React.FC<Props> = props => {
           address={place.address}
           creatorId={place.creator}
           coordinates={place.location}
+          onDelete={props.onDeletePlace}
         />
       ))}
     </ul>
