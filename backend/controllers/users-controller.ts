@@ -93,5 +93,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     return next(error);
   }
 
-  res.json({ message: 'Logged in!' });
+  res.json({
+    message: 'Logged in!',
+    user: existingUser.toObject({ getters: true })
+  });
 };
