@@ -7,7 +7,7 @@ type State = {
 
 type Inputs = {
   [key: string]: {
-    value: string | null,
+    value: string | Blob,
     isValid: boolean,
   } | undefined
 };

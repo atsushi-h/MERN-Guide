@@ -54,7 +54,7 @@ const Auth: React.FC = () => {
             isValid: false,
           },
           image: {
-            value: null,
+            value: new Blob(),
             isValid: false,
           },
         },
@@ -66,8 +66,6 @@ const Auth: React.FC = () => {
 
   const authSubmitHandler = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(formState.inputs);
     
     if (isLoginMode) {// Login
       try {
@@ -90,20 +88,21 @@ const Auth: React.FC = () => {
       }
     } else {// Signup
       try {
-        if (formState.inputs.name && formState.inputs.email && formState.inputs.password) {
+        if (formState.inputs.email && formState.inputs.password && formState.inputs.name && formState.inputs.image) {
+          const formData = new FormData();
+          formData.append('email', formState.inputs.email.value);
+          formData.append('name', formState.inputs.name.value);
+          formData.append('password', formState.inputs.password.value);
+          formData.append('image', formState.inputs.image.value);
+          
+          console.log(formState.inputs);
+
           const responseData = await sendRequest(
             'http://localhost:5000/api/users/signup',
             'POST',
-            JSON.stringify({
-              name: formState.inputs.name.value,
-              email: formState.inputs.email.value,
-              password: formState.inputs.password.value
-            }),
-            {
-              'Content-Type': 'application/json'
-            }
+            formData,
           );
-
+          
           auth.login(responseData.user.id);
         }
       } catch (err) {
