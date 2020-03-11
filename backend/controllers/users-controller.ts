@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import HttpError from '../models/http-error';
 import User from '../models/user';
@@ -81,7 +82,29 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     return next(error);
   }
 
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  // トークン生成
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: createdUser.id, email: createdUser.email },
+      'supersecret_dont_share',
+      { expiresIn: '1h' }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      'Signing up failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res
+    .status(201)
+    .json({
+      userId: createdUser.id,
+      email: createdUser.email,
+      token: token,
+    });
 };
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -129,8 +152,25 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     return next(error);
   }
 
+  // トークン生成
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: existingUser.id, email: existingUser.email },
+      'supersecret_dont_share',
+      { expiresIn: '1h' }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      'Logging in failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
   res.json({
-    message: 'Logged in!',
-    user: existingUser.toObject({ getters: true })
+    userId: existingUser.id,
+    email: existingUser.email,
+    token: token,
   });
 };
