@@ -5,6 +5,7 @@ import './ImageUpload.css';
 
 type Props = {
   id: string,
+  errorText: string,
   center: boolean,
   onInput: (id: string, file: string, isValid: boolean) => void,
 };
@@ -67,6 +68,7 @@ const ImageUpload: React.FC<Props> = props => {
         </div>
         <Button type="button" onClick={pickImageHandler}>PICK IMAGE</Button>
       </div>
+      {!isValid && <p>{props.errorText}</p>}
     </div>
   );
 };
