@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 import { Request, Response, NextFunction } from 'express';
 import { validationResult } from 'express-validator';
 import mongoose from 'mongoose';
@@ -191,6 +193,9 @@ export const deletePlace = async (req: Request, res: Response, next: NextFunctio
     return next(error);
   }
 
+  // 画像のパス（string型）
+  const imagePath = place.image.toString();
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -205,6 +210,11 @@ export const deletePlace = async (req: Request, res: Response, next: NextFunctio
     );
     return next(error);
   }
+
+  // 画像データの削除
+  fs.unlink(imagePath, (err: any) => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: 'Deleted place.' });
 };
