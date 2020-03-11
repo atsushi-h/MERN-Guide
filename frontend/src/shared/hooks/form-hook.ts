@@ -7,7 +7,7 @@ type State = {
 
 type Inputs = {
   [key: string]: {
-    value: string,
+    value: string | null,
     isValid: boolean,
   } | undefined
 };
