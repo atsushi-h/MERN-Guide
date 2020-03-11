@@ -8,6 +8,7 @@ import {
   updatePlace,
   deletePlace,
 } from '../controllers/places-controller';
+import fileUpload from '../middleware/file-upload';
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.get('/user/:uid', getPlacesByUserId);
 
 router.post(
   '/',
+  fileUpload.single('image'),
   [
     check('title')
       .not()

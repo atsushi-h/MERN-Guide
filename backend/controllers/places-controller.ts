@@ -88,7 +88,7 @@ export const createPlace = async (req: Request, res: Response, next: NextFunctio
   const createdPlace = new Place({
     title,
     description,
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
+    image: req.file.path,
     address,
     location: coordinates,
     creator,
