@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import fs from 'fs';
+import path from 'path';
+
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import monggose from 'mongoose';
@@ -12,6 +15,9 @@ import HttpError from './models/http-error';
 const app = express();
 
 app.use(bodyParser.json());
+
+// 静的ファイルの配信
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 // CORS対策
 app.use((req, res, next) => {
@@ -40,6 +46,11 @@ interface Error {
 }
 // Error Handling
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  if (req.file) {
+    fs.unlink(req.file.path, err => {
+      console.log(err);
+    });
+  }
   if (res.headersSent) {
     return next(error);
   }
