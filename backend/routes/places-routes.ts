@@ -9,11 +9,16 @@ import {
   deletePlace,
 } from '../controllers/places-controller';
 import fileUpload from '../middleware/file-upload';
+import checkAuth from '../middleware/check-auth';
 
 const router = Router();
 
 router.get('/:pid', getPlaceById);
 router.get('/user/:uid', getPlacesByUserId);
+
+// ログイン確認
+// エラーの場合、これより下の処理をブロック
+router.use(checkAuth);
 
 router.post(
   '/',
