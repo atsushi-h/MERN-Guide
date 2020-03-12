@@ -153,6 +153,17 @@ export const updatePlace = async (req: Request, res: Response, next: NextFunctio
     return next(error);
   }
 
+  // データを更新するユーザがデータの作成者かチェック
+  if (place && req.userData) {
+    if (place.creator.toString() !== req.userData.userId) {
+      const error = new HttpError(
+        'You are not allowed to edit this place.',
+        401
+      );
+      return next(error);
+    }
+  }
+
   if (place) {
     place.title = title;
     place.description = description;
