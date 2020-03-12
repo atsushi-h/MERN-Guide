@@ -213,7 +213,10 @@ export const deletePlace = async (req: Request, res: Response, next: NextFunctio
 
   // 画像データの削除
   fs.unlink(imagePath, (err: any) => {
-    console.log(err);
+    if (err) {
+      console.log(err);
+    }
+    console.log(`"${imagePath}" has been deleted.`);
   });
 
   res.status(200).json({ message: 'Deleted place.' });
