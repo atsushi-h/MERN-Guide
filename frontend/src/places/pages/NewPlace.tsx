@@ -54,6 +54,9 @@ const NewPlace: React.FC = () => {
           'http://localhost:5000/api/places',
           'POST',
           formData,
+          {
+            Authorization: 'Bearer ' + auth.token
+          },
         );
 
         // redirect to /

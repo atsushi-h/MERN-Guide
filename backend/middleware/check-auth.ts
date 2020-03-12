@@ -12,7 +12,7 @@ const checkAuth = (req: Request, res: Response, next: NextFunction) => {
       }
       const decodedToken: any = jwt.verify(token, 'supersecret_dont_share');
       req.userData = { userId: decodedToken.userId };
-      next();
+      return next();
     }
     throw new Error('Authentication failed!');
   } catch (err) {
