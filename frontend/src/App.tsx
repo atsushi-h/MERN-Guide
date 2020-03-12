@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 import Users from './user/pages/Users';
@@ -25,7 +25,19 @@ const App: React.FC = () => {
   const logout = useCallback(() => {
     setToken('');
     setUserId('');
+    localStorage.removeItem('userData');
   }, []);
+
+  // LocalStorageにトークンがあったら自動ログイン
+  useEffect(() => {
+    const storedDataText = localStorage.getItem('userData');
+    if (storedDataText) {
+      const storedDataObject = JSON.parse(storedDataText);
+      if (storedDataObject.token) {
+        login(storedDataObject.userId, storedDataObject.token);
+      }
+    }
+  }, [login]);
 
   let routes;
 
