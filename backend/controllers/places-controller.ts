@@ -204,6 +204,15 @@ export const deletePlace = async (req: Request, res: Response, next: NextFunctio
     return next(error);
   }
 
+  // データを削除するユーザがデータの作成者かチェック
+  if (req.userData && place.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      'You are not allowed to delete this place.',
+      401
+    );
+    return next(error);
+  }
+
   // 画像のパス（string型）
   const imagePath = place.image.toString();
 
