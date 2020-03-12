@@ -11,6 +11,7 @@ import monggose from 'mongoose';
 import placesRoutes from './routes/places-routes';
 import usersRoutes from './routes/users-routes';
 import HttpError from './models/http-error';
+import allowCrossDomain from './middleware/allow-cross-domain';
 
 const app = express();
 
@@ -20,16 +21,7 @@ app.use(bodyParser.json());
 app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 // CORS対策
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-
-  next();
-});
+app.use(allowCrossDomain);
 
 app.use('/api/places', placesRoutes); // => /api/places/...
 app.use('/api/users', usersRoutes);
