@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import HttpError from '../models/http-error';
 import User from '../models/user';
 
+const JWT_KEY: any = process.env.JWT_KEY;
+
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
   let users;
   try {
@@ -87,7 +89,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
   try {
     token = jwt.sign(
       { userId: createdUser.id, email: createdUser.email },
-      'supersecret_dont_share',
+      JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {
@@ -157,7 +159,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   try {
     token = jwt.sign(
       { userId: existingUser.id, email: existingUser.email },
-      'supersecret_dont_share',
+      JWT_KEY,
       { expiresIn: '1h' }
     );
   } catch (err) {

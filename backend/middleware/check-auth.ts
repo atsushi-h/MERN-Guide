@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 
 import HttpError from '../models/http-error';
 
+const JWT_KEY: any = process.env.JWT_KEY;
+
 const checkAuth = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (req.headers.authorization) {
@@ -10,7 +12,7 @@ const checkAuth = (req: Request, res: Response, next: NextFunction) => {
       if (!token) {
         throw new Error('Authentication failed!');
       }
-      const decodedToken: any = jwt.verify(token, 'supersecret_dont_share');
+      const decodedToken: any = jwt.verify(token, JWT_KEY);
       req.userData = { userId: decodedToken.userId };
       return next();
     }
