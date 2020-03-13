@@ -38,7 +38,7 @@ const UpdatePlace: React.FC = () => {
     const fetchPlace = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5000/api/places/${placeId}`
+          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`
         );
         setLoadedPlace(responseData.place);
 
@@ -67,7 +67,7 @@ const UpdatePlace: React.FC = () => {
     try {
       if (formState.inputs.title && formState.inputs.description) {
         await sendRequest(
-          `http://localhost:5000/api/places/${placeId}`,
+          `${process.env.REACT_APP_BACKEND_URL}/places/${placeId}`,
           'PATCH',
           JSON.stringify({
             title: formState.inputs.title.value,
