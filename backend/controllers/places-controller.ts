@@ -194,7 +194,7 @@ export const updatePlace = async (req: Request, res: Response, next: NextFunctio
 export const deletePlace = async (req: Request, res: Response, next: NextFunction) => {
   const placeId = req.params.pid;
   
-  let place;
+  let place: any;
   try {
     place = await Place.findById(placeId).populate('creator');
   } catch (err) {
